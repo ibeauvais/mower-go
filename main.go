@@ -1,15 +1,15 @@
 package main
 
 import (
+	"flag"
 	"fmt"
+	log "github.com/sirupsen/logrus"
 	"io/ioutil"
-	"os"
 )
 
 func main() {
-	inputFile := os.Args[1]
-
-	configFile, err := ioutil.ReadFile(inputFile)
+	var inputFile = flag.String("inputFile", "input.txt", "Input file")
+	configFile, err := ioutil.ReadFile(*inputFile)
 
 	if err != nil {
 		panic(err)
@@ -17,7 +17,8 @@ func main() {
 
 	lawn, mowersAndCommands, err := ParseConfigFile(configFile)
 	if err != nil {
-		panic(err)
+		log.Errorf("Error while parsing : %v", err)
+		return
 	}
 
 	for _, mowerAndCommands := range *mowersAndCommands {

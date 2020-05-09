@@ -1,114 +1,111 @@
 package main
 
 import (
-	"reflect"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func TestDirection_turnLeft(t *testing.T) {
 	tests := []struct {
-		name string
-		d    Direction
-		want Direction
+		name           string
+		inputDirection Direction
+		want           Direction
 	}{
 		{
-			name: "From North direction",
-			d:    North,
-			want: West,
+			name:           "From North direction",
+			inputDirection: North,
+			want:           West,
 		},
 		{
-			name: "From West direction",
-			d:    West,
-			want: South,
+			name:           "From West direction",
+			inputDirection: West,
+			want:           South,
 		},
 		{
-			name: "From South direction",
-			d:    South,
-			want: East,
+			name:           "From South direction",
+			inputDirection: South,
+			want:           East,
 		},
 		{
-			name: "From East direction",
-			d:    East,
-			want: North,
+			name:           "From East direction",
+			inputDirection: East,
+			want:           North,
 		},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.d.turnLeft(); got != tt.want {
-				t.Errorf("turnLeft() = %v, want %v", got, tt.want)
-			}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got := test.inputDirection.turnLeft()
+			assert.Equal(t, test.want, got)
 		})
 	}
 }
 
 func TestDirection_turnRight(t *testing.T) {
 	tests := []struct {
-		name string
-		d    Direction
-		want Direction
+		name           string
+		inputDirection Direction
+		want           Direction
 	}{
 		{
-			name: "From North direction",
-			d:    North,
-			want: East,
+			name:           "From North direction",
+			inputDirection: North,
+			want:           East,
 		},
 		{
-			name: "From West direction",
-			d:    West,
-			want: North,
+			name:           "From West direction",
+			inputDirection: West,
+			want:           North,
 		},
 		{
-			name: "From South direction",
-			d:    South,
-			want: West,
+			name:           "From South direction",
+			inputDirection: South,
+			want:           West,
 		},
 		{
-			name: "From East direction",
-			d:    East,
-			want: South,
+			name:           "From East direction",
+			inputDirection: East,
+			want:           South,
 		},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.d.turnRight(); got != tt.want {
-				t.Errorf("turnRight() = %v, want %v", got, tt.want)
-			}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got := test.inputDirection.turnRight()
+			assert.Equal(t, test.want, got)
 		})
 	}
 }
 
 func TestDirection_String(t *testing.T) {
 	tests := []struct {
-		name string
-		d    Direction
-		want string
+		name           string
+		inputDirection Direction
+		want           string
 	}{
 		{
-			name: "From North direction",
-			d:    North,
-			want: "North",
+			name:           "From North direction",
+			inputDirection: North,
+			want:           "North",
 		},
 		{
-			name: "From West direction",
-			d:    West,
-			want: "West",
+			name:           "From West direction",
+			inputDirection: West,
+			want:           "West",
 		},
 		{
-			name: "From South direction",
-			d:    South,
-			want: "South",
+			name:           "From South direction",
+			inputDirection: South,
+			want:           "South",
 		},
 		{
-			name: "From East direction",
-			d:    East,
-			want: "East",
+			name:           "From East direction",
+			inputDirection: East,
+			want:           "East",
 		},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.d.String(); got != tt.want {
-				t.Errorf("String() = %v, want %v", got, tt.want)
-			}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got := test.inputDirection.String()
+			assert.Equal(t, test.want, got)
 		})
 	}
 }
@@ -170,14 +167,13 @@ func TestLawn_isValid(t *testing.T) {
 			want:             false,
 		},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
 			l := Lawn{
-				topRightPosition: tt.topRightPosition,
+				topRightPosition: test.topRightPosition,
 			}
-			if got := l.isValid(tt.positionToValid); got != tt.want {
-				t.Errorf("isValid() = %v, want %v", got, tt.want)
-			}
+			got := l.isValid(test.positionToValid)
+			assert.Equal(t, test.want, got)
 		})
 	}
 }
@@ -215,12 +211,10 @@ func TestPosition_next(t *testing.T) {
 			want:      Position{2, 1},
 		},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			p := tt.position
-			if got := p.next(tt.direction); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("next() = %v, want %v", got, tt.want)
-			}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			got := test.position.next(test.direction)
+			assert.Equal(t, test.want, got)
 		})
 	}
 }
@@ -237,17 +231,14 @@ func TestMower_move(t *testing.T) {
 			name:     "First case",
 			mower:    Mower{position: Position{1, 2}, direction: North},
 			commands: []string{"G", "A", "G", "A", "G", "A", "G", "A", "A"},
-			lawn:     Lawn{topRightPosition:Position{5,5}},
+			lawn:     Lawn{topRightPosition: Position{5, 5}},
 			want:     Mower{position: Position{1, 3}, direction: North},
 		},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			m := tt.mower
-			mower := m.move(tt.commands, tt.lawn)
-			if !reflect.DeepEqual(*mower, tt.want) {
-				t.Errorf("next() = %v, want %v", m, tt.want)
-			}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			mower := test.mower.move(test.commands, test.lawn)
+			assert.Equal(t, test.want, *mower)
 		})
 	}
 }
